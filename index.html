@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+    <link rel="stylesheet" href="styleAll.css">
+</head>
+<body align="center">
+<div class="container">
+    <div class="general-text" >Sev-Kav TV
+        <img src="image/sevKavTV.jpg" alt="SevKavTV">
+    </div>
+    <form class="header-container">
+        <input class="header" placeholder="Search city...">
+        <button type="submit" class="search-city">🔍</button>
+        <button type="button" class="translate-in-farenheit">Convert from °C to °F</button>
+        <button type="button" class="translate-in-cilsius">Convert from  °F to °C</button>
+    </form>
+
+    <div class="content">
+        <div class="temperature-section">
+            <div class="next-temperature-section"></div>
+        </div>
+        <div class="locations-section">
+            <div class="section-title">Added Locations:</div>
+            <div class="divader"></div>
+            <div class="added-locations"></div>
+        </div>
+    </div>
+</div>
+<script type="module" src="app/main.js"></script>
+</body>
+</html>
