@@ -1,7 +1,7 @@
 import { favoritesCity, deleteCityInFavorite } from '../blockManagers/favoritesManager.js';
 import {addLoveCity, loadWeatherForCity} from '../blockManagers/weatherManager.js';
 import {addedLocations, temperatureSection, translateInFarenheitButton} from "../data/constans.js";
-import {setNextWeatherForm} from "../main.js";
+import {setNextWeatherForm} from "../../main.js";
 import {createElement, formatTimeFromTimestamp, createImageElement} from "../helpers/domElements.js";
 
 export function clearSearchInput (){
