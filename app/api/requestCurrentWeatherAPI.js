@@ -5,11 +5,11 @@ const serverUrl = 'http://api.openweathermap.org/data/2.5/weather';
 const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
 
 function createUrlForRequest(){
-    const cityName = cityInput.value;
     return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
-export function getRequestCurrentWeather(cityName){
+export function getRequestCurrentWeather(){
+    const cityName = cityInput.value;
     const URL = createUrlForRequest(cityName);
 
     return fetch(URL)
