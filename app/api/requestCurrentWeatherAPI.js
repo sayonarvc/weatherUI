@@ -8,32 +8,27 @@ function createUrlForRequest(cityName){
     return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
-export function getRequestCurrentWeather(){
-    const cityName = cityInput.value.trim();
-    if (!cityName) {
-        console.error("Введите название города.");
-        return;
+export async function getRequestCurrentWeather(){
+    try {
+        const cityName = cityInput.value.trim();
+        const URL = createUrlForRequest(cityName);
+        const response = await fetch(URL);
+        await checkAPIError(response, cityName);
+
+        const data = await response.json();
+        const weatherData = {
+            name: data.name,
+            temp: Math.round(data.main.temp),
+            icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+            feelsLike: Math.round(data.main.feels_like),
+            sunrise: data.sys.sunrise,
+            sunset: data.sys.sunset
+        };
+
+        localStorage.setItem('currentWeatherData', cityName);
+        return weatherData;
+    } catch (error) {
+        console.error(error.message);
+        throw error;
     }
-
-    const URL = createUrlForRequest(cityName);
-
-    return fetch(URL)
-        .then(response => checkAPIError(response, cityName))
-        .then(response => response.json())
-        .then(data => {
-            const weatherData = {
-                name: data.name,
-                temp: Math.round(data.main.temp),
-                icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
-                feelsLike: Math.round(data.main.feels_like),
-                sunrise: data.sys.sunrise,
-                sunset: data.sys.sunset
-            };
-
-            localStorage.setItem('currentWeatherData', JSON.stringify(weatherData));
-            return weatherData;
-        })
-        .catch(error => {
-            console.error("Ошибка при получении данных:", error.message);
-        });
 }
