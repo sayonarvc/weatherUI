@@ -12,18 +12,20 @@ import { cityInput } from "../data/constans.js";
 
 export let currentCity = '';
 
-export function loadWeatherForCity(cityName) {
-    cityInput.value = cityName;
+export async function loadWeatherForCity(cityName) {
+    try {
+        cityInput.value = cityName;
 
-    return getRequestCurrentWeather(cityName)
-        .then(data => {
-            setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
+        const data = await getRequestCurrentWeather(cityName);
 
-            localStorage.setItem('currentWeatherData', cityName);
-        })
-        .catch(error => {
-            alert(`Ошибка при загрузке погоды:, ${error}`);
-        });
+        setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
+        localStorage.setItem('currentWeatherData', cityName);
+
+        return data;
+    } catch (error) {
+        alert(`Ошибка при загрузке погоды:, ${error}`);
+        throw error;
+    }
 }
 
 export const addLoveCity = () => {

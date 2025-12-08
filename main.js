@@ -17,38 +17,43 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDOMAddedLocations();
 });
 
-function loadLastCityWeather(cityName) {
-    if (!cityName) return;
+async function loadLastCityWeather(cityName) {
+    try {
+        if (!cityName) return;
 
-    getRequestCurrentWeather(cityName)
-        .then(data => {
-            setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
-            setNextWeatherForm(cityName);
+        const data = await getRequestCurrentWeather(cityName);
 
-            translateInFarenheitButton.disabled = false;
-            translateInCelsiusButton.disabled = true;
-        })
-        .catch(error => {
-            console.error('Не удалось загрузить последний город:', error);
-        });
+        setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
+        setNextWeatherForm(cityName);
+
+        translateInFarenheitButton.disabled = false;
+        translateInCelsiusButton.disabled = true;
+
+        return data;
+    } catch (error) {
+        console.error('Не удалось загрузить последний город:', error);
+        throw error;
+    }
 }
 
-export function setNextWeatherForm(cityName) {
-    getRequestNextWeather(cityName)
-        .then(data => {
-            data.forecasts.forEach((forecast) => {
-                setNextWeather(
-                    forecast.dt,
-                    forecast.temp,
-                    forecast.feelsLike,
-                    forecast.icon
-                );
-            });
-        })
-        .catch(error => {
-            console.error(error);
-            alert(`Не удалось получить данные о погоде`);
+export async function setNextWeatherForm(cityName) {
+    try {
+        const data = await getRequestNextWeather(cityName);
+
+        data.forecasts.forEach((forecast) => {
+            setNextWeather(
+                forecast.dt,
+                forecast.temp,
+                forecast.feelsLike,
+                forecast.icon
+            );
         });
+
+        return data;
+    } catch (error){
+        console.error(error);
+        throw error;
+    }
 }
 
 function handleFormSubmit(e) {
@@ -63,22 +68,21 @@ function handleFormSubmit(e) {
     translateInCelsiusButton.disabled = true;
 }
 
-function setCurrentWeatherForm(cityName) {
-    if (!cityName) {
-        alert('Пожалуйста, введите название города');
-        return;
+async function setCurrentWeatherForm(cityName) {
+    try {
+        if (!cityName) {
+            alert('Пожалуйста, введите название города');
+            return;
+        }
+
+        const data = await getRequestCurrentWeather(cityName);
+
+        setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
+        localStorage.setItem('currentWeatherData', cityName);
+    } catch (error) {
+        alert(`Не удалось получить данные о погоде: ${error}`);
+        throw error;
     }
-
-    getRequestCurrentWeather(cityName)
-        .then(data => {
-            setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
-
-            localStorage.setItem('currentWeatherData', cityName);
-        })
-        .catch(error => {
-            console.error(error);
-            alert(`Не удалось получить данные о погоде`);
-        });
 }
 
 function toggleTemperatureToFarenheit() {
