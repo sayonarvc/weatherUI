@@ -4,7 +4,7 @@ const cityInput = document.querySelector('.header');
 const serverUrl = 'http://api.openweathermap.org/data/2.5/weather';
 const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
 
-function createUrlForRequest(){
+function createUrlForRequest(cityName){
     return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
