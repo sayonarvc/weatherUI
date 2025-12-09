@@ -25,7 +25,6 @@ export async function getRequestCurrentWeather(){
             sunset: data.sys.sunset
         };
 
-        localStorage.setItem('currentWeatherData', cityName);
         return weatherData;
     } catch (error) {
         console.error(error.message);

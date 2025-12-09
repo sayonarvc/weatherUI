@@ -62,8 +62,6 @@ function handleFormSubmit(e) {
     setCurrentWeatherForm(cityName);
     setNextWeatherForm(cityName);
 
-    localStorage.setItem('currentWeatherData', cityName)
-
     translateInFarenheitButton.disabled = false;
     translateInCelsiusButton.disabled = true;
 }
