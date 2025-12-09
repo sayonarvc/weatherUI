@@ -7,7 +7,23 @@ function createUrlForRequest(cityName){
     return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
-export async function getRequestNextWeather(cityName){
+function recursiveArrayHandler(list, index=0, forecasts=[]){
+    if(forecasts.length >= 3){
+        return forecasts;
+    }
+
+    const forecast = list[index];
+    forecasts.push({
+        dt: forecast.dt,
+        temp: Math.round(forecast.main.temp),
+        feelsLike: Math.round(forecast.main.feels_like),
+        icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`,
+    });
+
+    return recursiveArrayHandler(list, index + 1, forecasts);
+}
+
+export async function getRequestNextWeather(cityName) {
     try {
         const URL = createUrlForRequest(cityName);
         const response = await fetch(URL);
@@ -15,17 +31,12 @@ export async function getRequestNextWeather(cityName){
 
         const data = await response.json();
 
-        const forecasts = data.list.slice(0, 3).map(forecast => ({
-            dt: forecast.dt,
-            temp: Math.round(forecast.main.temp),
-            feelsLike: Math.round(forecast.main.feels_like),
-            icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`,
-        }));
+        const forecasts = recursiveArrayHandler(data.list, 3);
 
         return {
             forecasts: forecasts
-        }
-    } catch (error){
+        };
+    } catch (error) {
         console.error(error.message);
         throw error;
     }
