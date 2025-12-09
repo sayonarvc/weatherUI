@@ -47,8 +47,6 @@ export const setWeather = (nameCity, tempCity, imgWeather, feelsLike, sunrise, s
 
     currentCity = nameCity;
     clearSearchInput();
-
-    localStorage.setItem('currentWeatherData', nameCity);
 }
 
 export const setNextWeather = (dt, temp, feelsLike, icon) => {
