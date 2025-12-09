@@ -35,30 +35,30 @@ const createLikeButtonElement = () => {
 }
 
 const createCurrentFeelsLike = (feelsLikeData) => {
-    return createElement('div', 'feels-like', `Feels like: ${feelsLikeData}°C`);
+    return createElement('div', 'feels-like', `Ощущается как: ${feelsLikeData}°C`);
 }
 
 const createCurrentSunrise = (sunriseData) => {
     const formattedTime = formatTimeFromTimestamp(sunriseData);
-    return createElement('div', 'sunrise', `Sunrise: ${formattedTime}`);
+    return createElement('div', 'sunrise', `Рассвет: ${formattedTime}`);
 }
 
 const createCurrentSunset = (sunsetData) => {
     const formattedTime = formatTimeFromTimestamp(sunsetData);
-    return createElement('div', 'sunset', `Sunset: ${formattedTime}`);
+    return createElement('div', 'sunset', `Закат: ${formattedTime}`);
 }
 
 const createNextDateElement = (nextDt) => {
     const formattedTime = formatTimeFromTimestamp(nextDt);
-    return createElement('div', 'next-date', `Time: ${formattedTime}`);
+    return createElement('div', 'next-date', `Время: ${formattedTime}`);
 }
 
 const createNextTemperatureElement = (nextTemp) => {
-    return createElement('div', 'next-temperature', `Temperature: ${nextTemp}°C`);
+    return createElement('div', 'next-temperature', `Температура: ${nextTemp}°C`);
 }
 
 const createNextFeelsLikeElement = (nextFeelsLike) => {
-    return createElement('div', 'next-feels-like', `Feels like: ${nextFeelsLike}°C`);
+    return createElement('div', 'next-feels-like', `Ощущается как: ${nextFeelsLike}°C`);
 }
 
 const createNextIconElement = (nextImgWeather) => {

@@ -17,7 +17,7 @@ function recursiveArrayHandler(list, count, index=0, forecasts=[]){
         dt: forecast.dt,
         temp: Math.round(forecast.main.temp),
         feelsLike: Math.round(forecast.main.feels_like),
-        icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`,
+        icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`
         }
     )
 
