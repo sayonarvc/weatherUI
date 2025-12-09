@@ -76,6 +76,7 @@ async function setCurrentWeatherForm(cityName) {
         const data = await getRequestCurrentWeather(cityName);
 
         setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
+        localStorage.setItem('currentWeatherData', cityName);
     } catch (error) {
         alert(`Не удалось получить данные о погоде: ${error}`);
         throw error;
