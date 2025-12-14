@@ -1,6 +1,5 @@
 import { checkAPIError } from "../validation/isValidAPI.js";
 
-const cityInput = document.querySelector('.header');
 const serverUrl = `https://api.openweathermap.org/data/2.5/weather`;
 const apiKey = `f660a2fb1e4bad108d6160b7f58c555f`;
 
@@ -8,9 +7,8 @@ function createUrlForRequest(cityName){
     return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
-export async function getRequestCurrentWeather(){
+export async function getRequestCurrentWeather(cityName){
     try {
-        const cityName = cityInput.value.trim();
         const URL = createUrlForRequest(cityName);
         const response = await fetch(URL);
         await checkAPIError(response, cityName);
