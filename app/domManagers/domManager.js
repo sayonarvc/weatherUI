@@ -67,10 +67,13 @@ const createNextIconElement = (nextImgWeather) => {
 
 export function createWeatherElements(temp, img, city, like, feelsLike, sunrise, sunset) {
     const containerCurrentWeather = document.createElement('div');
+    const containerTemp = document.createElement('div');
+
     containerCurrentWeather.className = 'block-current-weather';
 
-    containerCurrentWeather.appendChild(temp);
-    containerCurrentWeather.appendChild(img);
+    containerTemp.appendChild(temp);
+    containerTemp.appendChild(img);
+    containerCurrentWeather.appendChild(containerTemp);
     containerCurrentWeather.appendChild(city);
     containerCurrentWeather.appendChild(like);
     containerCurrentWeather.appendChild(feelsLike);
