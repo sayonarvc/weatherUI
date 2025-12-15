@@ -86,7 +86,7 @@ body {
 }
 
 .temperature{
-    margin-right: 200px;
+    display: flex;
     font-variant-caps: all-small-caps;
     font-size: 30px;
 }
