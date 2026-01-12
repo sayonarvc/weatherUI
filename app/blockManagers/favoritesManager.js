@@ -1,7 +1,10 @@
 import data from '../data/data.json' with {type: 'json'};
+import {isValidAddDuplicateCity} from '../validation/isValidCityName';
+import {getInLSFavoriteCities, setInLSFavoriteCities} from '../helpers/localStorage';
+import {favoriteCitiesText} from '../data/constans';
 
 const getFavoriteCities = () => {
-  const saved = localStorage.getItem('favoriteCities');
+  const saved = getInLSFavoriteCities(favoriteCitiesText);
   if (!saved) {
     console.log('localStorage пуст, возвращаем пустой массив');
     return [];
@@ -15,32 +18,19 @@ export const favoriteCity = [...data];
 export let favoritesCity = getFavoriteCities();
 
 export const addCityInFavorite = (array, nameCity) => {
-  let existingCity = array.findIndex(city => city.name === nameCity);
-
-  if (nameCity.length === 0) {
-    console.error('Города без названия не существует');
-    return false;
-  }
-  if (nameCity.length > 160) {
-    console.error('Не существует такого города, чье название более 160 символов');
-    return false;
-  }
-  if (existingCity !== -1) {
-    console.error('Город с таким названием уже добавлен в избранное');
+  if (isValidAddDuplicateCity(array, nameCity)) {
     return false;
   }
 
-  //---пушится в localStorage
   array.push({
     name: nameCity
   });
 
-  //---пушится в data.json массив
   favoriteCity.push({
     name: nameCity
   });
 
-  localStorage.setItem('favoriteCities', JSON.stringify(array));
+  setInLSFavoriteCities(array);
   console.log('Сохранено в localStorage:', array);
   return true;
 };
@@ -49,9 +39,8 @@ export const deleteCityInFavorite = (array, nameCity) => {
   let indexCity = array.findIndex(city => city.name === nameCity);
 
   if (indexCity !== -1) {
-    //---удаляется из localStorage
     array.splice(indexCity, 1);
-    //---удаляется из data.json
+
     favoriteCity.splice(indexCity, 1);
     console.info('Город удален из массива');
 

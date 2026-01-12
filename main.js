@@ -1,15 +1,24 @@
 import {getRequestCurrentWeather} from './app/api/requestCurrentWeatherAPI.js';
 import {setNextWeather, setWeather} from './app/blockManagers/weatherManager.js';
 import {updateDOMAddedLocations} from './app/domManagers/domManager.js';
-import {cityInput, form, translateInCelsiusButton, translateInFarenheitButton} from './app/data/constans.js';
+import {
+  cityInput,
+  currentWeatherDataText,
+  form,
+  translateInCelsiusButton,
+  translateInFarenheitButton
+} from './app/data/constans.js';
 import {getRequestNextWeather} from './app/api/requestNextWeatherAPI.js';
 import {updateFavoriteCitiesFromStorage} from './app/blockManagers/favoritesManager.js';
 import {setCookie} from './app/helpers/cookie.js';
+import {availabilityTraslateButtonTemperature} from './app/helpers/enableButtonTranslateTemp';
+import {isValidCityName} from './app/validation/isValidCityName';
+import {setInLSCurrentWeatherData} from './app/helpers/localStorage';
 
 document.addEventListener('DOMContentLoaded', () => {
   updateFavoriteCitiesFromStorage();
 
-  const lastCity = localStorage.getItem('currentWeatherData') || '';
+  const lastCity = localStorage.getItem(currentWeatherDataText) || '';
   if (lastCity) {
     cityInput.value = lastCity;
     loadLastCityWeather(lastCity);
@@ -27,34 +36,28 @@ async function loadLastCityWeather(cityName) {
     setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
     setNextWeatherForm(cityName);
 
-    translateInFarenheitButton.disabled = false;
-    translateInCelsiusButton.disabled = true;
+    availabilityTraslateButtonTemperature(false, true);
 
     return data;
   } catch (error) {
-    console.error('Не удалось загрузить последний город:', error);
+    alert(`Не удалось загрузить последний город:, ${error}`);
     throw error;
   }
 }
 
 export async function setNextWeatherForm(cityName) {
-  try {
-    const data = await getRequestNextWeather(cityName);
+  const data = await getRequestNextWeather(cityName);
 
-    data.forecasts.forEach((forecast) => {
-      setNextWeather(
-        forecast.dt,
-        forecast.temp,
-        forecast.feelsLike,
-        forecast.icon
-      );
-    });
+  data.forecasts.forEach((forecast) => {
+    setNextWeather(
+      forecast.dt,
+      forecast.temp,
+      forecast.feelsLike,
+      forecast.icon
+    );
+  });
 
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return data;
 }
 
 function handleFormSubmit(e) {
@@ -63,21 +66,19 @@ function handleFormSubmit(e) {
   setCurrentWeatherForm(cityName);
   setNextWeatherForm(cityName);
 
-  translateInFarenheitButton.disabled = false;
-  translateInCelsiusButton.disabled = true;
+  availabilityTraslateButtonTemperature(false, true);
 }
 
 async function setCurrentWeatherForm(cityName) {
   try {
-    if (!cityName) {
-      alert('Пожалуйста, введите название города');
-      return;
+    if (isValidCityName(cityName)) {
+      return true;
     }
 
     const data = await getRequestCurrentWeather(cityName);
 
     setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
-    localStorage.setItem('currentWeatherData', cityName);
+    setInLSCurrentWeatherData(cityName);
     setCookie(cityName, 1);
 
   } catch (error) {
@@ -89,18 +90,12 @@ async function setCurrentWeatherForm(cityName) {
 function toggleTemperatureToFarenheit() {
   const temperatureElement = document.querySelector('.temperature');
 
-  if (!temperatureElement) {
-    console.log('Элемент температуры не найден');
-    return;
-  }
-
   const currentText = temperatureElement.textContent;
   const temperatureValue = parseInt(currentText);
 
   const fahrenheit = Math.round((temperatureValue * 9 / 5) + 32);
   temperatureElement.textContent = `${fahrenheit}°F`;
-  translateInFarenheitButton.disabled = true;
-  translateInCelsiusButton.disabled = false;
+  availabilityTraslateButtonTemperature(true, false);
 }
 
 function toggleTemperatureToCelsius() {
@@ -117,8 +112,7 @@ function toggleTemperatureToCelsius() {
   const celsius = Math.round((temperatureValue - 32) * 5 / 9);
   temperatureElement.textContent = `${celsius}°C`;
 
-  translateInCelsiusButton.disabled = true;
-  translateInFarenheitButton.disabled = false;
+  availabilityTraslateButtonTemperature(false, true);
 }
 
 translateInCelsiusButton.addEventListener('click', toggleTemperatureToCelsius);
