@@ -1,14 +1,16 @@
-import { getRequestCurrentWeather } from '../api/requestCurrentWeatherAPI.js';
-import { addCityInFavorite } from './favoritesManager.js';
+import {getRequestCurrentWeather} from '../api/requestCurrentWeatherAPI.js';
+import {addCityInFavorite, favoritesCity} from './favoritesManager.js';
 import {
   clearSearchInput,
   clearTemperatureSection,
+  createCurrentWeatherElementsArray,
+  createNextWeatherElements,
+  createNextWeatherElementsArray,
   createWeatherElements,
-  createCurrentWeatherElementsArray, createNextWeatherElementsArray, createNextWeatherElements
+  updateDOMAddedLocations
 } from '../domManagers/domManager.js';
-import { updateDOMAddedLocations } from '../domManagers/domManager.js';
-import { favoritesCity } from './favoritesManager.js';
-import { cityInput } from '../data/constans.js';
+import {cityInput} from '../data/constans.js';
+import {setInLSCurrentWeatherData} from '../helpers/localStorage';
 
 export let currentCity = '';
 
@@ -19,12 +21,11 @@ export async function loadWeatherForCity(cityName) {
     const data = await getRequestCurrentWeather(cityName);
 
     setWeather(data.name, data.temp, data.icon, data.feelsLike, data.sunrise, data.sunset);
-    localStorage.setItem('currentWeatherData', cityName);
+    setInLSCurrentWeatherData(cityName);
 
     return data;
   } catch (error) {
     alert(`Ошибка при загрузке погоды:, ${error}`);
-    throw error;
   }
 }
 

@@ -3,12 +3,12 @@ import {checkAPIError} from '../validation/isValidAPI.js';
 const serverUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 const apiKey = '5796abbde9106b7da4febfae8c44c232';
 
-function createUrlForRequest(cityName){
+function createUrlForRequest(cityName) {
   return `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
 }
 
-function recursiveArrayHandler(list, index=0, forecasts=[]){
-  if(index >= 3){
+function recursiveArrayHandler(list, index = 0, forecasts = []) {
+  if (index >= 3) {
     return forecasts;
   }
 
