@@ -12,3 +12,13 @@
 3. CSS
 4. API
 5. WebStorm
+
+### Техническая информация по установкам либ (необходимых библиотек) и локальному запуску:
+1. Установить пакет npm install js-cookie.
+2. Установить пакет npm install date-fns.
+3. Установить ESlint npm init @eslint/config@latest.
+4. Установить пакет npm i.
+5. Установить TS npm install -g typescript.
+6. Убедится, что в index.html подключаете модуль index.js (именно как модуль).
+7. Открыт index.html в браузере
+
